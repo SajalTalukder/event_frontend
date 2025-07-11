@@ -21,7 +21,7 @@ export interface User {
 }
 
 export type Event = {
-  id: string; // optional if you're using it for creation
+  _id: string; // optional if you're using it for creation
   name: string;
   banner: {
     secure_url: string; // URL of the banner image
@@ -33,7 +33,7 @@ export type Event = {
   time: string;
   location: string;
   additionalInfo?: string;
-  trainerName?: string;
+  trainer?: string;
   guest?: string;
   createdBy: User; // or `User` type if you're populating
   attendees?: User[]; // or `User[]` if populated

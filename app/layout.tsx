@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import ClientProvider from "@/components/hoc/ClientProvider";
+import ResponsiveNav from "@/components/home/Navbar/ResponsiveNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClientProvider>
+          <ResponsiveNav />
           {children}
           <Toaster position="top-center" />
         </ClientProvider>

@@ -10,11 +10,12 @@ import Image from "next/image";
 import { User, Event } from "@/types";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Profile = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const router = useRouter();
   const getMe = async () => {
     // request function
     const getMeReq = async () =>
@@ -116,11 +117,19 @@ const Profile = () => {
         <h3 className="text-xl font-semibold mb-4">
           {isOrganizer ? "Your Created Events" : "Your Joined Events"}
         </h3>
+        <Button
+          className="mb-10"
+          onClick={() => {
+            router.push("/event/create");
+          }}
+        >
+          Create Event
+        </Button>
 
         {events && events.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event: Event) => (
-              <Card key={event.id}>
+              <Card key={event._id}>
                 <CardHeader>{event.name}</CardHeader>
                 <CardContent>
                   <Image
