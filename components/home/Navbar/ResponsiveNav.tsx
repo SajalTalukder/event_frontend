@@ -30,9 +30,18 @@ const ResponsiveNav = () => {
   const NavLinks = getNavLinks();
 
   // Only show navbar on these routes
-  const shownRoutes = ["/", "/profile"];
+  const shownRoutes = [
+    "/",
+    "/profile",
+    "/events",
+    "/events/details/", // dynamic route base path without [id]
+    "/about",
+    "/contact",
+  ];
 
-  const showNavBar = shownRoutes.includes(pathname);
+  const showNavBar = shownRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route)
+  );
 
   if (!showNavBar) return null;
   console.log(user);

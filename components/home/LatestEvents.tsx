@@ -109,7 +109,7 @@ const LatestEvents = () => {
                   <span className="text-2xl font-bold text-blue-600">
                     ${event.price}
                   </span>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                  <button className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
                     View Details
                   </button>
                 </div>

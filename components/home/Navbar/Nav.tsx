@@ -33,7 +33,7 @@ const Nav = ({ openNav, navlinks, user }: Props) => {
 
   return (
     <nav
-      className={`transition-all duration-200 h-[12vh] z-[10000] shadow-sm fixed w-full ${
+      className={`transition-all bg-white duration-200 h-[12vh] z-[10000] shadow-sm fixed w-full ${
         navBg ? "bg-white/90 dark:bg-gray-900  backdrop-blur" : ""
       }`}
     >

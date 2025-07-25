@@ -59,7 +59,7 @@ const Profile = () => {
   return (
     <div className="w-full mb-10">
       {/* Top Banner */}
-      <div className="h-[25vh] w-full bg-pink-500/20 rounded-b-xl" />
+      <div className="h-[35vh] w-full bg-pink-500/20 rounded-b-xl" />
 
       {/* Profile Section */}
       <div className="flex flex-col items-center mt-[-3rem]">
