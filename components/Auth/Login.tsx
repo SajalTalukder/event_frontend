@@ -52,12 +52,18 @@ const Login = () => {
     const result = await handleRequest(loginRequest, setIsLoading);
     // Check if result exist
     if (result) {
+      // Get the user data from result
+      const user = result.data.data.user;
       // save data to redux
-      dispatch(setAuthUser(result.data.data.user));
+      dispatch(setAuthUser(user));
       //   toast message
       toast.success(result.data.message);
       //   redirect user to home page
-      router.push("/");
+      if (user.role === "organizer") {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   };
 
@@ -65,7 +71,15 @@ const Login = () => {
     <div className="w-full h-screen overflow-hidden">
       <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto min-h-screen">
         <h1 className="font-bold text-2xl text-left uppercase mb-8">
-          Login with <span className="text-rose-600"> Eventa</span>
+          Login with{" "}
+          <span
+            onClick={() => {
+              router.push("/");
+            }}
+            className="text-rose-600 underline cursor-pointer"
+          >
+            EventPro
+          </span>
         </h1>
         <form
           onSubmit={handleSubmit}
@@ -111,7 +125,7 @@ const Login = () => {
         </form>
         <h1 className="mt-4 text-lg  text-gray-800">
           Don't have any account ?{" "}
-          <Link href="/signup">
+          <Link href="/auth/signup">
             <span className="text-blue-800 underline cursor-pointer font-medium">
               Signup here
             </span>

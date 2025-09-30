@@ -1,3 +1,4 @@
+"use client";
 import { User } from "@/types";
 import Link from "next/link";
 import React from "react";
@@ -11,6 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { HiBars3BottomRight } from "react-icons/hi2";
+import axios from "axios";
+import { handleRequest } from "@/components/utils/apiRequest";
+import { BASE_API_URL } from "@/server";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "@/store/authSlice";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   user: User | null;
@@ -18,16 +25,29 @@ type Props = {
 };
 
 const NavButtons = ({ user, openNav }: Props) => {
+  const dispatch = useDispatch();
+
+  const logoutHandler = async () => {
+    const logoutRequest = async () =>
+      await axios.post(
+        `${BASE_API_URL}/users/logout`,
+        {},
+        { withCredentials: true }
+      );
+    const result = await handleRequest(logoutRequest);
+    if (result) {
+      // Clear user data from redux state management
+      dispatch(setAuthUser(null));
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center space-x-4">
         {/* Unauthenticated */}
         {!user?._id && (
-          <Link
-            href="/login"
-            className="px-5 py-2.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-900 hover:bg-gray-300 transition"
-          >
-            Login / Register
+          <Link href="/auth/login">
+            <Button size={"lg"}>Login / Register</Button>
           </Link>
         )}
 
@@ -57,8 +77,12 @@ const NavButtons = ({ user, openNav }: Props) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/my-events">My Events</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <button>Logout</button>
+              <DropdownMenuItem
+                onClick={logoutHandler}
+                asChild
+                className="cursor-pointer"
+              >
+                <button className="w-full">Logout</button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

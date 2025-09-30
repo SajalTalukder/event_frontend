@@ -30,7 +30,7 @@ const ForgetPassword = () => {
     if (result) {
       toast.success(result.data.message);
       //   redirect user to home page
-      router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+      router.push(`/auth/reset-password?email=${encodeURIComponent(email)}`);
     }
   };
 

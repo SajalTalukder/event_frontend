@@ -36,7 +36,7 @@ const ResetPassword = () => {
     if (result) {
       dispatch(setAuthUser(result.data.data.user));
       toast.success("Password reset successful");
-      router.push("/login");
+      router.push("/auth/login");
     }
   };
 

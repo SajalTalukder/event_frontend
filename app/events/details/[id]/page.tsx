@@ -5,7 +5,15 @@ import { useParams } from "next/navigation";
 import { BASE_API_URL } from "@/server";
 import { handleRequest } from "@/components/utils/apiRequest";
 import Image from "next/image";
-import { Loader } from "lucide-react";
+import {
+  Loader,
+  Calendar,
+  MapPin,
+  Clock,
+  DollarSign,
+  User,
+  Users,
+} from "lucide-react";
 import { Event } from "@/types";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -71,6 +79,7 @@ const EventDetailsPage = () => {
     );
   }
 
+  // Destructure event data safely with fallbacks
   const {
     name,
     description,
@@ -86,63 +95,129 @@ const EventDetailsPage = () => {
   } = event;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">{name}</h1>
+    <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+      {/* Event Title */}
+      <h1 className="text-4xl font-extrabold text-gray-900">{name}</h1>
 
-      <div className="w-full h-[400px] relative mb-6 rounded-md overflow-hidden shadow-md">
-        <Image
-          src={banner?.secure_url}
-          alt={name}
-          fill
-          className="object-contain"
-        />
+      {/* Banner Image */}
+      <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-lg">
+        {banner?.secure_url ? (
+          <Image
+            src={banner.secure_url}
+            alt={name}
+            fill
+            className="object-contain"
+            priority
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image Available
+          </div>
+        )}
       </div>
 
-      <div className="space-y-4 text-muted-foreground">
-        <p>
-          <span className="font-semibold text-black">Description:</span>{" "}
-          {description}
-        </p>
-        <p>
-          <span className="font-semibold text-black">Date:</span>{" "}
-          {new Date(date).toLocaleDateString()}
-        </p>
-        <p>
-          <span className="font-semibold text-black">Time:</span> {time}
-        </p>
-        <p>
-          <span className="font-semibold text-black">Location:</span> {location}
-        </p>
-        {price > 0 && (
-          <p>
-            <span className="font-semibold text-black">Price:</span> ৳{price}
-          </p>
-        )}
-        <p>
-          <span className="font-semibold text-black">Trainer:</span> {trainer}
-        </p>
-        <p>
-          <span className="font-semibold text-black">Guest:</span> {guest}
-        </p>
-        <p>
-          <span className="font-semibold text-black">Created By:</span>{" "}
-          {createdBy?.username}
-        </p>
+      {/* Info Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <Calendar className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Date</p>
+            <p className="font-semibold text-gray-900">
+              {new Date(date).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <Clock className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Time</p>
+            <p className="font-semibold text-gray-900">{time}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <MapPin className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Location</p>
+            <p className="font-semibold text-gray-900">{location}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <User className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Trainer</p>
+            <p className="font-semibold text-gray-900">{trainer || "N/A"}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <Users className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Guest</p>
+            <p className="font-semibold text-gray-900">{guest || "N/A"}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <DollarSign className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Price</p>
+            <p className="font-semibold text-gray-900">
+              {price > 0 ? `৳${price}` : "Free"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Description Section */}
+      <section className="bg-white p-6 rounded-lg shadow space-y-4">
+        <h2 className="text-2xl font-bold text-gray-900">About the Event</h2>
+        <p className="text-gray-700 whitespace-pre-line">{description}</p>
         {additionalInfo && (
-          <p>
-            <span className="font-semibold text-black">Additional Info:</span>{" "}
-            {additionalInfo}
-          </p>
+          <>
+            <h3 className="text-xl font-semibold mt-4">
+              Additional Information
+            </h3>
+            <p className="text-gray-700 whitespace-pre-line">
+              {additionalInfo}
+            </p>
+          </>
         )}
-      </div>
+      </section>
 
-      <Button
-        onClick={handleRegister}
-        className="mt-6 w-full sm:w-[200px]"
-        disabled={registering}
-      >
-        {registering ? "Registering..." : "Register Now"}
-      </Button>
+      {/* Organizer Info */}
+      {createdBy && (
+        <section className="bg-white p-6 rounded-lg shadow flex items-center gap-6">
+          <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-300">
+            <Image
+              src={createdBy.profilePhoto.secure_url || "/default-avatar.png"}
+              alt={createdBy.username || "Organizer"}
+              width={80}
+              height={80}
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900">
+              {createdBy.username}
+            </h3>
+            {/* If you want to add more organizer details here */}
+          </div>
+        </section>
+      )}
+
+      {/* Register Button */}
+      <div className="flex justify-center">
+        <Button
+          onClick={handleRegister}
+          disabled={registering}
+          className="px-10 py-3 text-lg font-semibold"
+        >
+          {registering
+            ? "Registering..."
+            : price > 0
+            ? `Register for ৳${price}`
+            : "Register for Free"}
+        </Button>
+      </div>
     </div>
   );
 };

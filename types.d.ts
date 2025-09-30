@@ -39,4 +39,21 @@ export type Event = {
   attendees?: User[]; // or `User[]` if populated
   createdAt?: Date;
   updatedAt?: Date;
+  capacity: number;
+  category: string;
 };
+
+export interface EventFormValues {
+  name: string;
+  description: string;
+  price: string;
+  date: string;
+  time: string;
+  location: string;
+  additionalInfo: string;
+  trainerName: string;
+  guest: string;
+  capacity: string;
+  category: string;
+  bannerPreview: string | undefined;
+}

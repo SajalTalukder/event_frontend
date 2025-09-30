@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
-import Nav from "./Nav";
-import MobileNav from "./MobileNav";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+
+import Nav from "./Nav";
+import MobileNav from "./MobileNav";
+
 import {
   baseLinks,
   organizerLinks,
@@ -29,22 +31,13 @@ const ResponsiveNav = () => {
 
   const NavLinks = getNavLinks();
 
-  // Only show navbar on these routes
-  const shownRoutes = [
-    "/",
-    "/profile",
-    "/events",
-    "/events/details/", // dynamic route base path without [id]
-    "/about",
-    "/contact",
-  ];
+  // ❌ Routes where you do NOT want to show the nav (denylist)
+  const hiddenRoutes = ["/dashboard", "/auth"];
 
-  const showNavBar = shownRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route)
-  );
+  // Check if current path starts with any route in the hiddenRoutes list
+  const hideNavBar = hiddenRoutes.some((route) => pathname.startsWith(route));
 
-  if (!showNavBar) return null;
-  console.log(user);
+  if (hideNavBar) return null;
 
   return (
     <>

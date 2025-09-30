@@ -80,7 +80,7 @@ const SignUp = () => {
       dispatch(setAuthUser(user));
 
       if (user.role === "organizer") {
-        router.push("/verify");
+        router.push("/auth/verify");
         toast.success(result.data.message);
       } else {
         router.push("/");
@@ -97,7 +97,15 @@ const SignUp = () => {
       )}
     >
       <h1 className="font-bold text-xl sm:text-2xl text-left uppercase mb-8">
-        Sign Up with <span className="text-rose-600">Eventa</span>
+        Sign Up with{" "}
+        <span
+          onClick={() => {
+            router.push("/");
+          }}
+          className="text-rose-600 underline cursor-pointer"
+        >
+          EventPro
+        </span>
       </h1>
 
       <form onSubmit={handleSubmit} className="w-full px-4">
@@ -243,7 +251,7 @@ const SignUp = () => {
       {/* Login Redirect */}
       <h1 className="mt-4 text-lg text-gray-800">
         Already have an account?{" "}
-        <Link href="/login">
+        <Link href="/auth/login">
           <span className="text-blue-800 underline cursor-pointer font-medium">
             Login Here
           </span>

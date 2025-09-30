@@ -9,7 +9,7 @@ const Logo = () => {
         <MdEvent className="w-5 h-5 text-white dark:text-black" />
       </div>
       <h1 className="text-xl md:text-2xl hidden sm:block font-bold text-cyan-800 dark:text-white">
-        EventTvent
+        EventPro
       </h1>
     </Link>
   );
