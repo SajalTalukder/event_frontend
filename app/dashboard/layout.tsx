@@ -13,7 +13,7 @@ export default async function DashboardLayout({
 
   if (!token) {
     console.log("⛔ No token. Redirecting to /login");
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   try {
@@ -27,7 +27,7 @@ export default async function DashboardLayout({
 
     if (!res.ok) {
       console.error("⛔ /me route failed:", res.status);
-      redirect("/login");
+      redirect("/auth/login");
     }
 
     const data = await res.json();
@@ -35,11 +35,15 @@ export default async function DashboardLayout({
     const user = data?.data?.user;
 
     if (!user) {
-      redirect("/login");
+      redirect("/auth/login");
     }
 
     if (user.role !== "organizer") {
       redirect("/");
+    }
+
+    if (user.role === "organizer") {
+      redirect("/dashboard");
     }
 
     return (
