@@ -12,7 +12,7 @@ export interface User {
   };
 
   createdEvents?: Event[];
-  registerdEvents?: Event[];
+  registeredEvents?: Event[];
 
   // Optional fields depending on role
   organizationName: string;
@@ -33,7 +33,7 @@ export type Event = {
   time: string;
   location: string;
   additionalInfo?: string;
-  trainer?: string;
+  trainerName?: string;
   guest?: string;
   createdBy: User; // or `User` type if you're populating
   attendees?: User[]; // or `User[]` if populated
@@ -41,6 +41,9 @@ export type Event = {
   updatedAt?: Date;
   capacity: number;
   category: string;
+  status: "upcoming" | "completed";
+  category: string;
+  capacity: string;
 };
 
 export interface EventFormValues {
@@ -57,3 +60,31 @@ export interface EventFormValues {
   category: string;
   bannerPreview: string | undefined;
 }
+
+export interface AttendeesType {
+  attendeeId: string;
+  email: string;
+  eventDate: string | Date;
+  eventId: string;
+  eventLocation: string;
+  eventName: string;
+  eventTime: string;
+  profilePhoto: {
+    public_id: string;
+    secure_url: string;
+  };
+  username: string;
+}
+
+export type OrganizerDashboardStats = {
+  totals: {
+    totalEvents: number;
+    totalAttendees: number;
+    totalRevenue: number;
+  };
+  growth: {
+    events: number; // percentage
+    attendees: number; // percentage
+    revenue: number; // percentage
+  };
+};

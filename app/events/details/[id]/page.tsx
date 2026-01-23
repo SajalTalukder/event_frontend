@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { BASE_API_URL } from "@/server";
 import { handleRequest } from "@/components/utils/apiRequest";
 import Image from "next/image";
@@ -18,6 +18,10 @@ import { Event } from "@/types";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { TbCategory } from "react-icons/tb";
+import { MdOutlineReduceCapacity } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const EventDetailsPage = () => {
   const { id } = useParams();
@@ -25,6 +29,8 @@ const EventDetailsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [registering, setRegistering] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -88,11 +94,14 @@ const EventDetailsPage = () => {
     date,
     time,
     location,
-    trainer,
+    trainerName,
     guest,
     additionalInfo,
     createdBy,
+    capacity,
+    category,
   } = event;
+  console.log(event);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
@@ -142,10 +151,26 @@ const EventDetailsPage = () => {
           </div>
         </div>
         <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <TbCategory className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Category</p>
+            <p className="font-semibold text-gray-900">{category}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
           <User className="text-blue-600" size={24} />
           <div>
             <p className="text-sm text-gray-600">Trainer</p>
-            <p className="font-semibold text-gray-900">{trainer || "N/A"}</p>
+            <p className="font-semibold text-gray-900">
+              {trainerName || "N/A"}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
+          <MdOutlineReduceCapacity className="text-blue-600" size={24} />
+          <div>
+            <p className="text-sm text-gray-600">Capacity</p>
+            <p className="font-semibold text-gray-900">{capacity}</p>
           </div>
         </div>
         <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow">
@@ -185,6 +210,7 @@ const EventDetailsPage = () => {
       {/* Organizer Info */}
       {createdBy && (
         <section className="bg-white p-6 rounded-lg shadow flex items-center gap-6">
+          <h1 className="text-lg font-semibold">Created By</h1>
           <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-300">
             <Image
               src={createdBy.profilePhoto.secure_url || "/default-avatar.png"}
@@ -206,17 +232,30 @@ const EventDetailsPage = () => {
 
       {/* Register Button */}
       <div className="flex justify-center">
-        <Button
-          onClick={handleRegister}
-          disabled={registering}
-          className="px-10 py-3 text-lg font-semibold"
-        >
-          {registering
-            ? "Registering..."
-            : price > 0
-            ? `Register for ৳${price}`
-            : "Register for Free"}
-        </Button>
+        {user && (
+          <Button
+            onClick={handleRegister}
+            disabled={registering}
+            className="px-10 py-3 text-lg font-semibold"
+          >
+            {registering
+              ? "Registering..."
+              : price > 0
+              ? `Register for ৳${price}`
+              : "Register for Free"}
+          </Button>
+        )}
+
+        {!user && (
+          <Button
+            onClick={() => {
+              router.push("/auth/login");
+            }}
+            className="px-10 py-3 text-lg font-semibold"
+          >
+            Login To Register
+          </Button>
+        )}
       </div>
     </div>
   );

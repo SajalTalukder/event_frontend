@@ -67,7 +67,15 @@ const NavButtons = ({ user, openNav }: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="z-[100001]">
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/profile">Profile</Link>
+                <Link
+                  href={`${
+                    user.role === "organizer"
+                      ? "/dashboard/profile"
+                      : "/profile"
+                  }`}
+                >
+                  Profile
+                </Link>
               </DropdownMenuItem>
               {user.role === "organizer" && (
                 <DropdownMenuItem asChild className="cursor-pointer">
@@ -75,7 +83,15 @@ const NavButtons = ({ user, openNav }: Props) => {
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/my-events">My Events</Link>
+                <Link
+                  href={`${
+                    user.role === "organizer"
+                      ? "/dashboard/my-events"
+                      : "/my-events"
+                  }`}
+                >
+                  My Events
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={logoutHandler}

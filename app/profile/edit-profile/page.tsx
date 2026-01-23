@@ -94,24 +94,24 @@ const EditProfile = () => {
     const result = await handleRequest(passwordUpdateReq, setPasswordLoading);
     console.log(result);
 
-    // if (result) {
-    //   dispatch(setAuthUser(result.data.data.user));
-    //   toast.success("Password updated successfully!");
-    //   // Reset password fields
-    //   setCurrentPassword("");
-    //   setNewPassword("");
-    //   setConfirmPassword("");
-    // }
+    if (result) {
+      dispatch(setAuthUser(result.data.data.user));
+      toast.success("Password updated successfully!");
+      // Reset password fields
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-md shadow-md">
+    <div className="max-w-3xl mx-auto p-6 bg-white  rounded-md shadow-md">
       <Button
         onClick={() => {
           router.push("/profile");
         }}
         size={"lg"}
-        className="mb-10"
+        className="mt-24 mb-10"
       >
         Go to Profile
       </Button>

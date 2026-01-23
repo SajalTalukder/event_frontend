@@ -8,9 +8,12 @@ import { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SidebarContent from "./SidebarContent";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <>
@@ -26,7 +29,7 @@ export default function Sidebar() {
                 <p>Dashboard</p>
               </div>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={user?.profilePhoto.secure_url} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>

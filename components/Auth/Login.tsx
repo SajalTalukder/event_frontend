@@ -107,7 +107,7 @@ const Login = () => {
               value={formData.password}
             />
             <Link
-              href="/forget-password"
+              href="/auth/forget-password"
               className="mt-2 text-red-600 block font-semibold text-base cursor-pointer text-right"
             >
               Forget Password?

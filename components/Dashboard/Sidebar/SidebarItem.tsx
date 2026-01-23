@@ -13,11 +13,11 @@ type Props = {
   href: string;
   Icon: LucideIcon;
   label: string;
-  badge?: string | number;
+
   onLogout?: () => void;
 };
 
-const SidebarItem = ({ href, Icon, label, badge }: Props) => {
+const SidebarItem = ({ href, Icon, label }: Props) => {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -56,17 +56,6 @@ const SidebarItem = ({ href, Icon, label, badge }: Props) => {
             <Icon className="w-5 h-5" />
             <span>{label}</span>
           </div>
-          {badge && (
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                label === "Notifications"
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {badge}
-            </span>
-          )}
         </button>
       </div>
     );
@@ -80,17 +69,6 @@ const SidebarItem = ({ href, Icon, label, badge }: Props) => {
           <Icon className="w-5 h-5" />
           <span>{label}</span>
         </div>
-        {badge && (
-          <span
-            className={`text-xs px-2 py-0.5 rounded-full ${
-              label === "Notifications"
-                ? "bg-red-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            {badge}
-          </span>
-        )}
       </Link>
     </div>
   );

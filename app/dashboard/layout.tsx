@@ -42,10 +42,6 @@ export default async function DashboardLayout({
       redirect("/");
     }
 
-    if (user.role === "organizer") {
-      redirect("/dashboard");
-    }
-
     return (
       <div className="sm:flex min-h-screen">
         <Sidebar />

@@ -7,15 +7,14 @@ import { BASE_API_URL } from "@/server";
 import axios from "axios";
 import { handleRequest } from "@/components/utils/apiRequest";
 import Image from "next/image";
-import { User, Event } from "@/types";
+import { User } from "@/types";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const Profile = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
+
   const getMe = async () => {
     // request function
     const getMeReq = async () =>
@@ -38,7 +37,7 @@ const Profile = () => {
   if (isLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
-        <Loader className="w-32 h-32 animate-spin" />
+        <Loader className="w-12 h-12 animate-spin" />
       </div>
     );
   }
@@ -54,7 +53,9 @@ const Profile = () => {
   const isOrganizer = userData.role === "organizer";
   const events = isOrganizer
     ? userData.createdEvents
-    : userData.registerdEvents;
+    : userData.registeredEvents;
+
+  console.log(events);
 
   return (
     <div className="w-full mb-10">
@@ -117,39 +118,32 @@ const Profile = () => {
         <h3 className="text-xl font-semibold mb-4">
           {isOrganizer ? "Your Created Events" : "Your Joined Events"}
         </h3>
-        <Button
-          className="mb-10"
-          onClick={() => {
-            router.push("/event/create");
-          }}
-        >
-          Create Event
-        </Button>
 
-        {events && events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event: Event) => (
-              <Card key={event._id}>
-                <CardHeader>{event.name}</CardHeader>
-                <CardContent>
-                  <Image
-                    src={event.banner?.secure_url ?? "/placeholder.jpg"}
-                    alt={event.name}
-                    width={400}
-                    height={200}
-                    className="rounded-md object-cover"
-                  />
-                  <p className="text-sm mt-2 text-muted-foreground">
-                    {new Date(event.date).toLocaleDateString()}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events &&
+            events.map((event) => (
+              <Card key={event._id} className="overflow-hidden flex flex-col">
+                <Image
+                  src={event.banner?.secure_url}
+                  alt={event.name}
+                  width={600}
+                  height={400}
+                  className="w-full h-[200px] object-cover"
+                />
+                <CardContent className="p-4 flex flex-col gap-2">
+                  <h2 className="text-lg font-semibold">{event.name}</h2>
+                  <p className="text-muted-foreground text-sm">
+                    {new Date(event.date).toLocaleDateString()} at {event.time}
                   </p>
-                  <p>{event.price}</p>
+                  <p className="text-sm line-clamp-2">{event.description}</p>
+                  <p className="text-primary font-semibold">৳{event.price}</p>
+                  <Link href={`/events/details/${event._id}`}>
+                    <Button className="mt-2 w-full">View Details</Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground">No events found.</p>
-        )}
+        </div>
       </div>
     </div>
   );
