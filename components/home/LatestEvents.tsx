@@ -35,7 +35,6 @@ const LatestEvents = () => {
         });
 
       const result = await handleRequest(getLatestEvents, setLoading);
-      console.log(result);
 
       if (result) {
         setEvents(result.data.data.events || []);

@@ -1,55 +1,42 @@
 import Sidebar from "@/components/Dashboard/Sidebar/Sidebar";
-import { BASE_API_URL } from "@/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { BASE_API_URL } from "@/server";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies(); // ✅ await this
-  const token = cookieStore.get("token")?.value;
+  // ✅ await cookies()!
+  const cookieStore = await cookies();
+  const tokenCookie = cookieStore.get("token")?.value;
 
-  if (!token) {
-    console.log("⛔ No token. Redirecting to /login");
-    redirect("/auth/login");
-  }
+  if (!tokenCookie) redirect("/"); // no token → redirect
 
-  try {
-    const res = await fetch(`${BASE_API_URL}/users/me`, {
-      method: "GET",
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-      cache: "no-store",
-    });
+  // Construct Cookie header for backend
+  const cookieHeader = `token=${tokenCookie}`;
 
-    if (!res.ok) {
-      console.error("⛔ /me route failed:", res.status);
-      redirect("/auth/login");
-    }
+  // Fetch user server-side
+  const res = await fetch(`${BASE_API_URL}/users/me`, {
+    headers: {
+      Cookie: cookieHeader,
+    },
+    cache: "no-store",
+  });
 
-    const data = await res.json();
+  if (!res.ok) redirect("/"); // failed fetch → redirect
 
-    const user = data?.data?.user;
+  const data = await res.json();
+  const user = data?.data?.user;
+  console.log(user);
 
-    if (!user) {
-      redirect("/auth/login");
-    }
+  if (!user || user.role !== "organizer") redirect("/"); // not admin → redirect
 
-    if (user.role !== "organizer") {
-      redirect("/");
-    }
-
-    return (
-      <div className="sm:flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1 md:ml-[18rem]  mx-auto  p-6">{children}</main>
-      </div>
-    );
-  } catch (err) {
-    console.error("❌ Error while fetching user in layout:", err);
-    redirect("/");
-  }
+  return (
+    <div className="sm:flex min-h-screen">
+      <Sidebar />
+      <main className="flex-1 md:ml-[18rem] mx-auto p-6">{children}</main>
+    </div>
+  );
 }
