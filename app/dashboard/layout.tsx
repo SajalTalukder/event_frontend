@@ -1,37 +1,42 @@
-import Sidebar from "@/components/Dashboard/Sidebar/Sidebar";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { BASE_API_URL } from "@/server";
+"use client";
 
-export default async function DashboardLayout({
+import Sidebar from "@/components/Dashboard/Sidebar/Sidebar";
+import { useAuth } from "@/hooks/useAuth";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // ✅ await cookies()!
-  const cookieStore = await cookies();
-  const tokenCookie = cookieStore.get("token")?.value;
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
-  if (!tokenCookie) redirect("/"); // no token → redirect
+  useEffect(() => {
+    // Redirect if loading done and user not admin or not logged in
+    if (!loading) {
+      if (!user || user.role !== "organizer") {
+        router.replace("/"); // client-side redirect
+      }
+    }
+  }, [user, loading, router]);
 
-  // Construct Cookie header for backend
-  const cookieHeader = `token=${tokenCookie}`;
+  // While loading, show spinner
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center flex-col">
+        <Loader className="w-12 h-12 animate-spin mb-4" />
+      </div>
+    );
+  }
 
-  // Fetch user server-side
-  const res = await fetch(`${BASE_API_URL}/users/me`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) redirect("/"); // failed fetch → redirect
-
-  const data = await res.json();
-  const user = data?.data?.user;
-  console.log(user);
-
-  if (!user || user.role !== "organizer") redirect("/"); // not admin → redirect
+  // **Important**: only render dashboard if user exists AND role is admin
+  if (!user || user.role !== "organizer") {
+    router.replace("/"); // ensure redirect
+    return null; // prevents rendering while redirect happens
+  }
 
   return (
     <div className="sm:flex min-h-screen">
