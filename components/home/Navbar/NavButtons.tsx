@@ -18,6 +18,7 @@ import { BASE_API_URL } from "@/server";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "@/store/authSlice";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 type Props = {
   user: User | null;
@@ -38,6 +39,7 @@ const NavButtons = ({ user, openNav }: Props) => {
     if (result) {
       // Clear user data from redux state management
       dispatch(setAuthUser(null));
+      redirect("/");
     }
   };
 
