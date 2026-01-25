@@ -14,27 +14,33 @@ export const handleRequest = async <T>(
   setLoading?: (loading: boolean) => void,
   options?: HandleRequestOptions,
 ): Promise<T | null> => {
-  if (setLoading) setLoading(true);
+  setLoading?.(true);
 
   try {
-    const response = await requestCallback();
-    return response;
+    return await requestCallback();
   } catch (error) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
+    const status = axiosError.response?.status;
+    const message = axiosError.response?.data?.message?.toLowerCase();
 
-    // Suppress 401 Unauthorized if option is set
-    if (axiosError?.response?.status === 401 && options?.suppressUnauthorized) {
+    // 🔕 SILENT AUTH FAIL (Home / hydration)
+    if (
+      options?.suppressUnauthorized &&
+      (status === 401 ||
+        status === 403 ||
+        message?.includes("invalid signature") ||
+        message?.includes("jwt"))
+    ) {
       return null;
     }
 
-    if (axiosError?.response?.data?.message) {
-      toast.error(axiosError.response.data.message);
-    } else {
-      toast.error("An unexpected error occurred.");
-    }
+    // 🔔 Normal errors
+    toast.error(
+      axiosError.response?.data?.message || "An unexpected error occurred.",
+    );
 
     return null;
   } finally {
-    if (setLoading) setLoading(false);
+    setLoading?.(false);
   }
 };

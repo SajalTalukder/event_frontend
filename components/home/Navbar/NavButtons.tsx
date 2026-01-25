@@ -32,7 +32,7 @@ const NavButtons = ({ user, openNav }: Props) => {
       await axios.post(
         `${BASE_API_URL}/users/logout`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
     const result = await handleRequest(logoutRequest);
     if (result) {
@@ -87,7 +87,7 @@ const NavButtons = ({ user, openNav }: Props) => {
                   href={`${
                     user.role === "organizer"
                       ? "/dashboard/my-events"
-                      : "/my-events"
+                      : "/profile"
                   }`}
                 >
                   My Events

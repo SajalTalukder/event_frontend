@@ -48,7 +48,7 @@ const Dashboard = () => {
       </p>
       {/* Main Stats Grid */}
 
-      {/* <EventStatsGrid /> */}
+      <EventStatsGrid />
 
       {/* bottom part  */}
       <div className="grid grid-cols-1 mt-16 lg:grid-cols-3 gap-6 lg:gap-8">

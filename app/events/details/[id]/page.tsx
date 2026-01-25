@@ -57,15 +57,13 @@ const EventDetailsPage = () => {
       await axios.post(
         `${BASE_API_URL}/events/register/${id}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
     const result = await handleRequest(registerEvent, setRegistering);
 
     if (result) {
       toast.success("Successfully registered for the event!");
-    } else {
-      toast.error("Failed to register. You might already be registered.");
     }
   };
 
@@ -241,8 +239,8 @@ const EventDetailsPage = () => {
             {registering
               ? "Registering..."
               : price > 0
-              ? `Register for ৳${price}`
-              : "Register for Free"}
+                ? `Register for ৳${price}`
+                : "Register for Free"}
           </Button>
         )}
 
