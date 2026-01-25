@@ -5,6 +5,7 @@ import React from "react";
 import { formatDate, formatTime } from "../utils/utils";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   event: Event;
@@ -22,7 +23,7 @@ const EventCard = ({ event, isOrganizer, onDelete }: Props) => {
   const remainSpot = event.capacity - (event.attendees?.length || 0);
 
   const capacityPercentage = Number(
-    ((remainSpot / event.capacity) * 100).toFixed(1)
+    ((remainSpot / event.capacity) * 100).toFixed(1),
   );
 
   return (
@@ -81,8 +82,8 @@ const EventCard = ({ event, isOrganizer, onDelete }: Props) => {
                 Number(fillPercent) >= 90
                   ? "bg-red-500"
                   : Number(fillPercent) >= 70
-                  ? "bg-yellow-500"
-                  : "bg-blue-500"
+                    ? "bg-yellow-500"
+                    : "bg-blue-500"
               }`}
               style={{ width: `${fillPercent}%` }}
             />
@@ -105,19 +106,22 @@ const EventCard = ({ event, isOrganizer, onDelete }: Props) => {
 
         {!isOrganizer && (
           <div className="mt-5">
-            <Button className="w-full" size={"lg"}>
-              View Details
-            </Button>
+            <Link href={`/events/details/${event._id}`}>
+              <Button className="w-full" size={"lg"}>
+                View Details
+              </Button>
+            </Link>
           </div>
         )}
         {isOrganizer && (
-          <div className="mt-5 flex items-center gap-3 ">
+          <div className="mt-5 flex flex-col sm:flex-row items-center gap-3 ">
             <Button
               onClick={() => {
                 router.push(`/dashboard/edit-event/${event._id}`);
               }}
               variant={"outline"}
               size={"lg"}
+              className="w-full sm:w-fit"
             >
               <Edit />
               Edit Event
@@ -128,6 +132,7 @@ const EventCard = ({ event, isOrganizer, onDelete }: Props) => {
               }}
               variant={"destructive"}
               size={"lg"}
+              className="w-full sm:w-fit"
             >
               <Trash2 />
               Delete Event

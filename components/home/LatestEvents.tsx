@@ -5,23 +5,9 @@ import { handleRequest } from "@/components/utils/apiRequest";
 import { BASE_API_URL } from "@/server";
 import axios from "axios";
 import { Event } from "@/types";
-import {
-  ArrowRight,
-  Calendar,
-  Loader,
-  MapPin,
-  Star,
-  Users,
-} from "lucide-react";
-import Image from "next/image";
+import { ArrowRight, Loader } from "lucide-react";
 
-const formateDate = (date: Date | string) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long", // or "short"
-    day: "numeric",
-  });
-};
+import EventCard from "../Events/EventCard";
 
 const LatestEvents = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -66,54 +52,7 @@ const LatestEvents = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event: Event) => (
-            <div
-              key={event._id}
-              className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="relative h-48">
-                <Image
-                  src={event.banner.secure_url}
-                  alt={event.name}
-                  className="w-full h-full object-cover"
-                  width={400}
-                  height={400}
-                />
-                <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full flex items-center">
-                  <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                  <span className="text-sm font-medium">4.3</span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {event.name}
-                </h3>
-
-                <div className="space-y-2 text-sm text-gray-600 mb-4">
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    {formateDate(event.date)}
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    {event.location}
-                  </div>
-                  <div className="flex items-center">
-                    <Users className="w-4 h-4 mr-2" />
-                    {event.attendees?.length} attendees
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-blue-600">
-                    ${event.price}
-                  </span>
-                  <button className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    View Details
-                  </button>
-                </div>
-              </div>
-            </div>
+            <EventCard event={event} key={event._id} isOrganizer={false} />
           ))}
         </div>
 

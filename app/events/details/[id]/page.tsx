@@ -102,9 +102,11 @@ const EventDetailsPage = () => {
   console.log(event);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+    <div className="max-w-6xl pt-[20vh] mx-auto px-4 py-10 space-y-8">
       {/* Event Title */}
-      <h1 className="text-4xl font-extrabold text-gray-900">{name}</h1>
+      <h1 className=" text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900">
+        {name}
+      </h1>
 
       {/* Banner Image */}
       <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-lg">
@@ -113,7 +115,7 @@ const EventDetailsPage = () => {
             src={banner.secure_url}
             alt={name}
             fill
-            className="object-contain"
+            className="object-cover w-full h-full"
             priority
           />
         ) : (

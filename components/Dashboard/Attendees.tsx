@@ -40,7 +40,7 @@ const Attendees = () => {
       <p className="text-sm sm:text-base text-gray-600 mt-1">
         Manage your event participants
       </p>
-      <div className="mt-10 grid grid-cols-2 gap-10 ">
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-10 ">
         <div className="bg-green-600/10 p-4 text-center rounded shadow-md">
           <h1 className="text-5xl text-blue-800 font-bold">{totalAttendees}</h1>
           <h1 className="mt-3 text-lg font-semibold text-gray-600">
@@ -58,7 +58,7 @@ const Attendees = () => {
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
           List Of Attendees
         </h1>
-        <div className="mt-4 grid grid-cols-4 gap-4 ">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
           {attendees.map((attendee, i) => {
             return (
               <div key={i} className="bg-gray-100 p-4 rounded-md">

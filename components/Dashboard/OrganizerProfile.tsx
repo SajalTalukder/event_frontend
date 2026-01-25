@@ -11,7 +11,7 @@ const OrganizerProfile = () => {
   console.log(organizer);
 
   return (
-    <div className=" p-6 w-full md:w-[70%] mx-auto mt-10">
+    <div className=" p-6 w-full lg:w-[70%] mx-auto mt-10">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
         <Link href="/dashboard/profile/edit-profile">

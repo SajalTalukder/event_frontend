@@ -26,6 +26,8 @@ export const useAuth = () => {
           setUser(null); // explicitly set null if not logged in
         }
       } catch (err) {
+        console.log(err);
+
         setUser(null); // explicitly set null on error
       } finally {
         setLoading(false);

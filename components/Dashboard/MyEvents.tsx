@@ -139,7 +139,7 @@ const MyEvents = () => {
 
       {!isLoading && events.length > 0 && (
         <>
-          <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+          <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 gap-10">
             {events.map((event) => (
               <EventCard
                 key={event._id}

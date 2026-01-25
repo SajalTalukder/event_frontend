@@ -29,7 +29,7 @@ const EventStatsGrid = () => {
 
   return (
     <div className="pt-12">
-      <div className="grid grid-cols-3 gap-10 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <div className="p-4 bg-gray-50 text-center shadow-md">
           <h1 className="text-xl font-bold mb-2">Total Events </h1>
           <p className="text-blue-600 font-bold text-4xl">

@@ -4,14 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { handleRequest } from "@/components/utils/apiRequest";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
 import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 import { Event } from "@/types";
+import EventCard from "@/components/Events/EventCard";
 
 const EVENTS_PER_PAGE = 6;
 
@@ -112,26 +110,7 @@ const EventsPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <Card key={event._id} className="overflow-hidden flex flex-col">
-              <Image
-                src={event.banner?.secure_url}
-                alt={event.name}
-                width={600}
-                height={400}
-                className="w-full h-[200px] object-cover"
-              />
-              <CardContent className="p-4 flex flex-col gap-2">
-                <h2 className="text-lg font-semibold">{event.name}</h2>
-                <p className="text-muted-foreground text-sm">
-                  {new Date(event.date).toLocaleDateString()} at {event.time}
-                </p>
-                <p className="text-sm line-clamp-2">{event.description}</p>
-                <p className="text-primary font-semibold">৳{event.price}</p>
-                <Link href={`/events/details/${event._id}`}>
-                  <Button className="mt-2 w-full">View Details</Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <EventCard key={event._id} event={event} isOrganizer={false} />
           ))}
         </div>
       )}
