@@ -82,7 +82,7 @@ const ResetPassword = () => {
         </LoadingButton>
 
         <Button variant={"ghost"}>
-          <Link href="/auth/forgetpassword">Go Back</Link>
+          <Link href="/auth/forget-password">Go Back</Link>
         </Button>
       </div>
     </div>
