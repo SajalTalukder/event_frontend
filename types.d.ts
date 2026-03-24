@@ -18,6 +18,10 @@ export interface User {
   organizationName: string;
   organizationURL: string;
   phoneNumber: string;
+
+  stripeAccountId: string;
+
+  stripeConnected: boolean;
 }
 
 export type Event = {

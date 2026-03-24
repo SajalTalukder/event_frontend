@@ -1,14 +1,70 @@
 "use client";
 import { RootState } from "@/store/store";
 import { Building, Edit, Mail, Phone, User } from "lucide-react";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
+import { LoadingButton } from "../Helper/LoadingButton";
+import { BASE_API_URL } from "@/server";
+import axios from "axios";
+import { handleRequest } from "../utils/apiRequest";
+import { setAuthUser } from "@/store/authSlice";
 
 const OrganizerProfile = () => {
   const organizer = useSelector((state: RootState) => state.auth.user);
   console.log(organizer);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [stripeInfo, setStripeInfo] = useState<any>(null);
+
+  const handleStripConnect = async () => {
+    const handleStripReq = async () =>
+      await axios.post(
+        `${BASE_API_URL}/payments/connect`,
+        {},
+        { withCredentials: true },
+      );
+
+    const result = await handleRequest(handleStripReq, setIsLoading);
+    if (result) {
+      dispatch(setAuthUser(result.data.data.user));
+      window.location.href = result.data.data.url;
+    }
+  };
+
+  useEffect(() => {
+    const getStripInfo = async () => {
+      const getStripeInfoReq = async () =>
+        await axios.get(`${BASE_API_URL}/payments/stripe-info`, {
+          withCredentials: true,
+        });
+
+      const result = await handleRequest(getStripeInfoReq);
+
+      if (result) {
+        setStripeInfo(result.data.data.stripe);
+      }
+    };
+    getStripInfo();
+  }, []);
+
+  const handleDisconnectStripe = async () => {
+    const disconnectReq = async () =>
+      await axios.delete(`${BASE_API_URL}/payments/disconnect`, {
+        withCredentials: true,
+      });
+
+    const result = await handleRequest(disconnectReq, setIsLoading);
+
+    if (result) {
+      dispatch(setAuthUser(result.data.data.user));
+
+      setStripeInfo(null);
+    }
+  };
 
   return (
     <div className=" p-6 w-full lg:w-[70%] mx-auto mt-10">
@@ -112,6 +168,50 @@ const OrganizerProfile = () => {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="bg-white rounded-xl mt-10 shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Payment Setup
+        </h3>
+
+        {organizer?.stripeAccountId ? (
+          <div className="space-y-3">
+            <div className="text-green-600 font-medium">
+              ✅ Stripe Connected
+            </div>
+
+            <div className="text-sm text-gray-600">
+              Charges: {stripeInfo?.chargesEnabled ? "Enabled" : "Disabled"}
+            </div>
+
+            <div className="text-sm text-gray-600">
+              Payouts: {stripeInfo?.payoutsEnabled ? "Enabled" : "Disabled"}
+            </div>
+
+            {stripeInfo?.bank && (
+              <div className="text-gray-800">
+                💳 {stripeInfo.bank.bankName} **** {stripeInfo.bank.last4}
+              </div>
+            )}
+
+            <button
+              onClick={handleDisconnectStripe}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Disconnect Stripe
+            </button>
+          </div>
+        ) : (
+          <LoadingButton
+            size={"lg"}
+            onClick={handleStripConnect}
+            isLoading={isLoading}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg"
+          >
+            Connect Stripe Account
+          </LoadingButton>
+        )}
       </div>
     </div>
   );

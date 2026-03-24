@@ -17,20 +17,22 @@ import {
 import { Event } from "@/types";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { TbCategory } from "react-icons/tb";
 import { MdOutlineReduceCapacity } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { setAuthUser } from "@/store/authSlice";
 
 const EventDetailsPage = () => {
   const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [registering, setRegistering] = useState<boolean>(false);
+  // const [registering, setRegistering] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -52,18 +54,18 @@ const EventDetailsPage = () => {
   }, [id]);
 
   const handleRegister = async () => {
-    if (!id) return;
-    const registerEvent = async () =>
+    const checkoutReq = async () =>
       await axios.post(
-        `${BASE_API_URL}/events/register/${id}`,
+        `${BASE_API_URL}/payments/checkout/${id}`,
         {},
         { withCredentials: true },
       );
 
-    const result = await handleRequest(registerEvent, setRegistering);
+    const result = await handleRequest(checkoutReq);
 
     if (result) {
-      toast.success("Successfully registered for the event!");
+      dispatch(setAuthUser(result.data.data.user));
+      window.location.href = result.data.url;
     }
   };
 
@@ -235,14 +237,10 @@ const EventDetailsPage = () => {
         {user && (
           <Button
             onClick={handleRegister}
-            disabled={registering}
+            // disabled={registering}
             className="px-10 py-3 text-lg font-semibold"
           >
-            {registering
-              ? "Registering..."
-              : price > 0
-                ? `Register for ৳${price}`
-                : "Register for Free"}
+            Register
           </Button>
         )}
 
